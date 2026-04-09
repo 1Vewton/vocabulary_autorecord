@@ -8,7 +8,7 @@ import (
 )
 
 // Excel Reader
-func readExcel(
+func ReadExcel(
 	filePath string,
 	sheetName string,
 	definitionRow string,
