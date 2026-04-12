@@ -2,9 +2,12 @@ package basic_config
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"os"
 
 	"github.com/1Vewton/vocabulary_autorecord/data_management/config"
+	"github.com/1Vewton/vocabulary_autorecord/utils/confirmation_interface"
 	"github.com/1Vewton/vocabulary_autorecord/utils/json_validator"
 )
 
@@ -21,6 +24,15 @@ var BasicConfig basicConfig
 func initializeBasicConfigDefault() {
 	BasicConfig.DefinitionFieldName = "definition"
 	BasicConfig.VocabFieldName = "vocabulary"
+}
+
+// Instruction for user to set the basic config
+func Instruction4SettingBasicConfig() {
+	fmt.Println("You refuse to overwrite the configuration file. However, the program cannot run without the basic configuration.")
+	fmt.Println("You can set the json file manually. ")
+	fmt.Println("The followings are the meaning for the fields: ")
+	fmt.Println("- VocabFieldName: the name of the field in the vocabulary list file that contains the raw vocabulary.")
+	fmt.Println("- DefinitionFieldName: the name of the field in the vocabulary list file that contains the definition of the vocabulary.")
 }
 
 // Initialize Basic Config
@@ -72,12 +84,32 @@ func InitializeBasicConfig() (Error error) {
 				return err
 			}
 			if !result {
-				// Overwrite the file if the json file does not correspond to the schema
-				initializeBasicConfigDefault()
-				bytes, _ := json.MarshalIndent(BasicConfig, "", "  ")
-				err = os.WriteFile(config.Settings.BaiscConfigPath, bytes, 0666)
-				if err != nil {
-					return err
+			ASK:
+				choice := confirmation_interface.ConfirmationInterface(
+					"The schema of the configuration file is not correspond to the schema, do you want to overwrite the configuration file with default setting?",
+					false,
+				)
+				if choice {
+					fmt.Println("Overwriting the configuration file with default setting...")
+					// Overwrite the file if the json file does not correspond to the schema
+					initializeBasicConfigDefault()
+					bytes, _ := json.MarshalIndent(BasicConfig, "", "  ")
+					err = os.WriteFile(config.Settings.BaiscConfigPath, bytes, 0666)
+					if err != nil {
+						return err
+					}
+				} else {
+					// The part to ask the user whether to exit if there is a problem with the configuration file
+					Instruction4SettingBasicConfig()
+					exit_choice := confirmation_interface.ConfirmationInterface(
+						"The program will exit now, do you want to exit?",
+						false,
+					)
+					if exit_choice {
+						return errors.New("The user refuse to overwrite the configuration file, program exit.")
+					} else {
+						goto ASK
+					}
 				}
 			}
 		}
