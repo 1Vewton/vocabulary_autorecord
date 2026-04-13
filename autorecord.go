@@ -2,28 +2,48 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/1Vewton/vocabulary_autorecord/data_management/basic_config"
 	"github.com/1Vewton/vocabulary_autorecord/data_management/config"
+	"github.com/1Vewton/vocabulary_autorecord/data_management/vocabulary_manager"
+	"github.com/1Vewton/vocabulary_autorecord/utils/confirmation_interface"
 	"github.com/1Vewton/vocabulary_autorecord/utils/welcome_text"
 )
 
 // Initialize: Initializes the env file
 func init() {
+INIT:
+	// Process the error when initiating
+	errorProcessInitiating := func(service string, Error error) bool {
+		if Error != nil {
+			fmt.Printf("Error loading %s due to %s\n", service, Error)
+			will_quite := confirmation_interface.ConfirmationInterface(
+				"The program cannot start up. Do you want to quit?",
+				true,
+			)
+			if will_quite {
+				os.Exit(1)
+			} else {
+				return false
+			}
+		} else {
+			fmt.Printf("Successfully loaded %s \n", service)
+		}
+		return true
+	}
 	Error := config.InitializeConfig(".env")
-	if Error != nil {
-		fmt.Println("Error loading.env file due to ", Error)
-		panic(Error)
-	} else {
-		fmt.Println("Successfully loaded env file")
+	if !errorProcessInitiating("env file", Error) {
+		goto INIT
 	}
 	config.InitializeSettings()
 	Error = basic_config.InitializeBasicConfig()
-	if Error != nil {
-		fmt.Println("Error loading basic config file due to ", Error)
-		panic(Error)
-	} else {
-		fmt.Println("Successfully loaded basic config file")
+	if !errorProcessInitiating("basic config", Error) {
+		goto INIT
+	}
+	Error = vocabulary_manager.InitializeVocabularyManager()
+	if !errorProcessInitiating("vocabulary list", Error) {
+		goto INIT
 	}
 }
 

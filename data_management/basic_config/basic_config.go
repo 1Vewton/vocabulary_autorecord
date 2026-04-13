@@ -27,7 +27,7 @@ func initializeBasicConfigDefault() {
 }
 
 // Instruction for user to set the basic config
-func Instruction4SettingBasicConfig() {
+func instruction4SettingBasicConfig() {
 	fmt.Println("You refuse to overwrite the configuration file. However, the program cannot run without the basic configuration.")
 	fmt.Println("You can set the json file manually. ")
 	fmt.Println("The followings are the meaning for the fields: ")
@@ -93,14 +93,17 @@ func InitializeBasicConfig() (Error error) {
 					fmt.Println("Overwriting the configuration file with default setting...")
 					// Overwrite the file if the json file does not correspond to the schema
 					initializeBasicConfigDefault()
-					bytes, _ := json.MarshalIndent(BasicConfig, "", "  ")
+					bytes, err := json.MarshalIndent(BasicConfig, "", "  ")
+					if err != nil {
+						return err
+					}
 					err = os.WriteFile(config.Settings.BaiscConfigPath, bytes, 0666)
 					if err != nil {
 						return err
 					}
 				} else {
 					// The part to ask the user whether to exit if there is a problem with the configuration file
-					Instruction4SettingBasicConfig()
+					instruction4SettingBasicConfig()
 					exit_choice := confirmation_interface.ConfirmationInterface(
 						"The program will exit now, do you want to exit?",
 						false,
