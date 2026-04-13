@@ -11,7 +11,7 @@ import (
 	"github.com/1Vewton/vocabulary_autorecord/utils/welcome_text"
 )
 
-// Initialize: Initializes the env file
+// Initialize: Initializes the configuration for the program
 func init() {
 INIT:
 	// Process the error when initiating
@@ -19,7 +19,7 @@ INIT:
 		if Error != nil {
 			fmt.Printf("Error loading %s due to %s\n", service, Error)
 			will_quite := confirmation_interface.ConfirmationInterface(
-				"The program cannot start up. Do you want to quit?",
+				"\033[31mThe program cannot startup, do you want to quit?\033[0m",
 				true,
 			)
 			if will_quite {
@@ -32,6 +32,7 @@ INIT:
 		}
 		return true
 	}
+	fmt.Println("\033[32mInitializing the program...\033[0m")
 	Error := config.InitializeConfig(".env")
 	if !errorProcessInitiating("env file", Error) {
 		goto INIT

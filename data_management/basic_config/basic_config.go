@@ -84,34 +84,37 @@ func InitializeBasicConfig() (Error error) {
 				return err
 			}
 			if !result {
-			ASK:
-				choice := confirmation_interface.ConfirmationInterface(
-					"The schema of the configuration file is not correspond to the schema, do you want to overwrite the configuration file with default setting?",
-					false,
-				)
-				if choice {
-					fmt.Println("Overwriting the configuration file with default setting...")
-					// Overwrite the file if the json file does not correspond to the schema
-					initializeBasicConfigDefault()
-					bytes, err := json.MarshalIndent(BasicConfig, "", "  ")
-					if err != nil {
-						return err
-					}
-					err = os.WriteFile(config.Settings.BaiscConfigPath, bytes, 0666)
-					if err != nil {
-						return err
-					}
-				} else {
-					// The part to ask the user whether to exit if there is a problem with the configuration file
-					instruction4SettingBasicConfig()
-					exit_choice := confirmation_interface.ConfirmationInterface(
-						"The program will exit now, do you want to exit?",
+				// choice for user
+				for {
+					choice := confirmation_interface.ConfirmationInterface(
+						"\033[31mThe schema of the configuration file is not correspond to the schema, do you want to overwrite the configuration file with default setting?\033[0m",
 						false,
 					)
-					if exit_choice {
-						return errors.New("The user refuse to overwrite the configuration file, program exit.")
+					if choice {
+						fmt.Println("Overwriting the configuration file with default setting...")
+						// Overwrite the file if the json file does not correspond to the schema
+						initializeBasicConfigDefault()
+						bytes, err := json.MarshalIndent(BasicConfig, "", "  ")
+						if err != nil {
+							return err
+						}
+						err = os.WriteFile(config.Settings.BaiscConfigPath, bytes, 0666)
+						if err != nil {
+							return err
+						}
+						break
 					} else {
-						goto ASK
+						// The part to ask the user whether to exit if there is a problem with the configuration file
+						instruction4SettingBasicConfig()
+						exit_choice := confirmation_interface.ConfirmationInterface(
+							"\033[31mThe config reading session will end now, do you want to exit?\033[0m",
+							false,
+						)
+						if exit_choice {
+							return errors.New("The user refuse to overwrite the configuration file, program exit.")
+						} else {
+							continue
+						}
 					}
 				}
 			}
