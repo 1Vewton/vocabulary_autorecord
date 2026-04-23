@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VocabularyList",
+  "type": "object",
+  "properties": {
+    "LastUpdateTime": {
+      "type": "integer",
+      "description": "Unix timestamp of the last update time"
+    },
+    "Data": {
+      "type": "array",
+      "description": "List of vocabulary entries",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Word": {
+            "type": "string",
+            "description": "The vocabulary word"
+          },
+          "Definition": {
+            "type": "string",
+            "description": "Definition of the word"
+          },
+          "StudiedPossibility": {
+            "type": "number",
+            "description": "Probability of being studied (float64)"
+          }
+        },
+        "required": ["Word", "Definition", "StudiedPossibility"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["LastUpdateTime", "Data"],
+  "additionalProperties": false
+}

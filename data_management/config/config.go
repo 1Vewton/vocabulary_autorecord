@@ -8,8 +8,10 @@ import (
 // Env struct
 type env_config struct {
 	// Paths
-	BaiscConfigPath string
-	VocabListPath   string
+	BaiscConfigPath  string
+	VocabListPath    string
+	ConfigSchemaPath string
+	VocabSchemaPath  string
 	// Storage
 	VocabFieldNane      string
 	DefinitionFieldNane string
@@ -38,4 +40,6 @@ func InitializeSettings() {
 	Settings.VocabListPath = env_reader.GetEnvString("VOCAB_LIST_PATH", "vocab_list.json")
 	Settings.VocabFieldNane = env_reader.GetEnvString("VOCAB_FIELD_NAME", "vocabulary")
 	Settings.DefinitionFieldNane = env_reader.GetEnvString("DEFINITION_FIELD_NAME", "definition")
+	Settings.ConfigSchemaPath = env_reader.GetEnvString("CONFIG_SCHEMA_PATH", "config_schema.json")
+	Settings.VocabSchemaPath = env_reader.GetEnvString("VOCAB_SCHEMA_PATH", "vocab_schema.json")
 }

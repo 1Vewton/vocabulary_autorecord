@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/1Vewton/vocabulary_autorecord/commands/root"
 	"github.com/1Vewton/vocabulary_autorecord/data_management/basic_config"
 	"github.com/1Vewton/vocabulary_autorecord/data_management/config"
 	"github.com/1Vewton/vocabulary_autorecord/data_management/vocabulary_manager"
@@ -52,4 +53,8 @@ INIT:
 func main() {
 	fmt.Println("Welcome to ")
 	welcome_text.WelcomeText()
+	Err := root.Execute()
+	if Err != nil {
+		fmt.Printf("\033[31mExecution failed due to %s\033[0m", Err)
+	}
 }

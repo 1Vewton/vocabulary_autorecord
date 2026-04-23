@@ -74,7 +74,7 @@ func InitializeBasicConfig() (Error error) {
 		}
 	} else {
 		// Validate the config
-		schema_content, err := os.ReadFile("config_schema.json")
+		schema_content, err := os.ReadFile(config.Settings.ConfigSchemaPath)
 		if err != nil {
 			return err
 		} else {
