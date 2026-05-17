@@ -63,10 +63,11 @@ func AddVocabularies(vocab_list_from_file map[string]string) (Error error) {
 	}
 	string_content := string(content)
 	// Read schema
-	schema_content, err := os.ReadFile(config.Settings.ConfigSchemaPath)
+	schema_content, err := os.ReadFile(config.Settings.VocabSchemaPath)
 	string_schema_content := string(schema_content)
 	// validate json
 	result, err := json_validator.Validate(string_schema_content, string_content)
+	fmt.Println("Finish validating json")
 	if result {
 		var vocabulary_list VocabularyList
 		err = json.Unmarshal(content, &vocabulary_list)
@@ -103,6 +104,8 @@ func AddVocabularies(vocab_list_from_file map[string]string) (Error error) {
 			return err
 		}
 		fmt.Println("Add vocabulary successfully!")
+	} else {
+		return errors.New("Invalid json format")
 	}
 	return nil
 }
