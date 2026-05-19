@@ -122,3 +122,79 @@ func InitializeBasicConfig() (Error error) {
 	}
 	return nil
 }
+
+// Configurations changing
+func ChangeConfig() (Error error) {
+	// Check whether the configuration file exists
+	_, err := os.Stat(config.Settings.BaiscConfigPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			// Create file if not exist
+			initializeBasicConfigDefault()
+			_, err := os.Create(config.Settings.BaiscConfigPath)
+			if err == nil {
+				bytes, _ := json.MarshalIndent(BasicConfig, "", "  ")
+				err = os.WriteFile(config.Settings.BaiscConfigPath, bytes, 0666)
+				if err != nil {
+					return err
+				}
+			}
+			return err
+		} else {
+			return err
+		}
+	}
+	// Show info
+	fmt.Println("The current configuration is:")
+	fmt.Println("VocabFieldName: ", BasicConfig.VocabFieldName)
+	fmt.Println("DefinitionFieldName: ", BasicConfig.DefinitionFieldName)
+	fmt.Println("\033[1;34mYou can change the configuration by inputting the new values.\033[0m")
+	// Do get info
+	do_input := confirmation_interface.ConfirmationInterface("Do you want to alter the configuration?", true)
+	if do_input {
+		fmt.Println("Input the name of the field you want to change and the new value. ")
+		var continue_inputting bool = true
+		for continue_inputting {
+			var input string
+			fmt.Scan(&input)
+			switch input {
+			case "VocabFieldName":
+				fmt.Print("New VocabFieldName: ")
+				var new_vocab_field_name string
+				fmt.Scan(&new_vocab_field_name)
+				if new_vocab_field_name == "" {
+					fmt.Println("The VocabFieldName cannot be empty.")
+				} else {
+					BasicConfig.VocabFieldName = new_vocab_field_name
+					fmt.Println("VocabFieldName changed to ", new_vocab_field_name)
+				}
+			case "DefinitionFieldName":
+				fmt.Print("New DefinitionFieldName: ")
+				var new_definition_field_name string
+				fmt.Scan(&new_definition_field_name)
+				if new_definition_field_name == "" {
+					fmt.Println("The DefinitionFieldName cannot be empty.")
+				} else {
+					BasicConfig.DefinitionFieldName = new_definition_field_name
+					fmt.Println("DefinitionFieldName changed to ", new_definition_field_name)
+				}
+			default:
+				fmt.Println("Invalid input. ")
+			}
+			// If the user wants to end the inputting
+			continue_inputting = confirmation_interface.ConfirmationInterface("Continue changing the configuration?", false)
+			if !continue_inputting {
+				fmt.Println("Configuration changing finished. ")
+				bytes, _ := json.MarshalIndent(BasicConfig, "", "  ")
+				err = os.WriteFile(config.Settings.BaiscConfigPath, bytes, 0666)
+				if err != nil {
+					return err
+				}
+				break
+			}
+		}
+	} else {
+		fmt.Println("Configuration unchanged.")
+	}
+	return nil
+}

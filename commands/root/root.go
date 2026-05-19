@@ -1,6 +1,7 @@
 package root
 
 import (
+	"github.com/1Vewton/vocabulary_autorecord/commands/config_setting"
 	"github.com/1Vewton/vocabulary_autorecord/commands/read_file"
 	"github.com/spf13/cobra"
 )
@@ -15,6 +16,7 @@ var rootCommand = &cobra.Command{
 // Execute the root command
 func Execute() error {
 	rootCommand.AddCommand(read_file.ReadFileCMD)
+	rootCommand.AddCommand(config_setting.ConfigSettingCmd)
 	err := rootCommand.Execute()
 	return err
 }

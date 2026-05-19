@@ -1,13 +1,10 @@
 package confirmation_interface
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"strings"
 )
 
-// Confirmation interface: [y/N] or [N/y]
+// Confirmation interface: [y/N] or [Y/n]
 func ConfirmationInterface(prompt string, defaultAns bool) bool {
 	var suffix string
 	if defaultAns {
@@ -16,15 +13,10 @@ func ConfirmationInterface(prompt string, defaultAns bool) bool {
 		suffix = " [y/N]"
 	}
 	fmt.Printf("%s %s: ", prompt, suffix)
+	fmt.Println()
 	// Input
-	reader := bufio.NewReader(os.Stdin)
-	input, err := reader.ReadString('\n')
-	// Error: Get default answer
-	if err != nil {
-		return defaultAns
-	}
-	// Trim input
-	input = strings.TrimSpace(input)
+	var input string
+	fmt.Scan(&input)
 	// Check input
 	if input == "y" || input == "Y" {
 		return true
