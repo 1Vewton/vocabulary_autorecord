@@ -30,6 +30,11 @@ func InitializeConfig(env_path string) (err error) {
 	return Err
 }
 
+// get pL0
+func GetpL0() float64 {
+	return Settings.pL0
+}
+
 // Initialize settings
 func InitializeSettings() {
 	Settings.pL0 = env_reader.GetEnvFloat64("PL0", 0.000001)

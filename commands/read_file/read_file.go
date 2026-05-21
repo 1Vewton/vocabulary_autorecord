@@ -33,6 +33,7 @@ var ReadFileCMD = &cobra.Command{
 			fmt.Println()
 			return
 		}
+		fmt.Println("\033[32mVocabulary adding from file successful\033[0m")
 	},
 }
 
