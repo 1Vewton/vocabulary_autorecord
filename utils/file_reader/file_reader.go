@@ -76,7 +76,9 @@ func ReadExcel(
 		}
 	}
 	for i, row := range rows {
-		if len(row) > definitionIdx && len(row) > vocabIdx {
+		if len(row) > definitionIdx &&
+			len(row) > vocabIdx &&
+			i > 0 {
 			definitionData[i] = row[definitionIdx]
 			vocabData[i] = row[vocabIdx]
 		}

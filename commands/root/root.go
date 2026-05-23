@@ -4,6 +4,7 @@ import (
 	"github.com/1Vewton/vocabulary_autorecord/commands/add_vocabulary"
 	"github.com/1Vewton/vocabulary_autorecord/commands/config_setting"
 	"github.com/1Vewton/vocabulary_autorecord/commands/read_file"
+	"github.com/1Vewton/vocabulary_autorecord/commands/vocabulary_manager"
 	"github.com/spf13/cobra"
 )
 
@@ -19,6 +20,7 @@ func Execute() error {
 	rootCommand.AddCommand(read_file.ReadFileCMD)
 	rootCommand.AddCommand(add_vocabulary.AddVocabularyCMD)
 	rootCommand.AddCommand(config_setting.ConfigSettingCmd)
+	rootCommand.AddCommand(vocabulary_manager.VocabularyManagerCMD)
 	err := rootCommand.Execute()
 	return err
 }

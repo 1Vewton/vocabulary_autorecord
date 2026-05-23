@@ -5,9 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"sort"
 	"time"
 
 	"github.com/1Vewton/vocabulary_autorecord/data_management/config"
+	"github.com/1Vewton/vocabulary_autorecord/utils/confirmation_interface"
 	"github.com/1Vewton/vocabulary_autorecord/utils/json_validator"
 )
 
@@ -21,6 +23,17 @@ type Vocabulary struct {
 type VocabularyList struct {
 	LastUpdateTime int
 	Data           []Vocabulary
+}
+
+// Sort interface
+func (a VocabularyList) Len() int {
+	return len(a.Data)
+}
+func (a VocabularyList) Swap(i, j int) {
+	a.Data[i], a.Data[j] = a.Data[j], a.Data[i]
+}
+func (a VocabularyList) Less(i, j int) bool {
+	return a.Data[i].StudiedPossibility < a.Data[j].StudiedPossibility
 }
 
 // Initializes vocabulary list by checking whether the file exists or not
@@ -79,9 +92,6 @@ func ReadVocabularyList() (
 // Add vocabularies to the vocabulary list
 func AddVocabularies(vocab_list_from_file map[string]string) (Error error) {
 	fmt.Println("Start adding vocabulary...")
-	var string_schema_content string
-	var string_content string
-	var content []byte
 	// Read schema and content
 	_, content, string_schema_content, string_content, err := ReadVocabularyList()
 	if err != nil {
@@ -113,6 +123,8 @@ func AddVocabularies(vocab_list_from_file map[string]string) (Error error) {
 				new_vocab.Definition = def
 				new_vocab.StudiedPossibility = config.GetpL0()
 				vocabulary_list.Data = append(vocabulary_list.Data, new_vocab)
+				// Update last update time
+				vocabulary_list.LastUpdateTime = int(time.Now().Unix())
 			} else {
 				fmt.Println("\033[31mThis vocabulary already exists!\033[0m")
 				fmt.Println()
@@ -137,9 +149,6 @@ func AddVocabularies(vocab_list_from_file map[string]string) (Error error) {
 // Add single vocabulary to the vocabulary list
 func AddVocabulary(vocab string, def string) (Error error) {
 	fmt.Println("Start adding vocabulary...")
-	var string_schema_content string
-	var string_content string
-	var content []byte
 	// Read schema and content
 	_, content, string_schema_content, string_content, err := ReadVocabularyList()
 	if err != nil {
@@ -168,6 +177,8 @@ func AddVocabulary(vocab string, def string) (Error error) {
 			new_vocab.Definition = def
 			new_vocab.StudiedPossibility = config.GetpL0()
 			vocabulary_list.Data = append(vocabulary_list.Data, new_vocab)
+			// Update last update time
+			vocabulary_list.LastUpdateTime = int(time.Now().Unix())
 		} else {
 			fmt.Println("\033[31mThis vocabulary already exists!\033[0m")
 			fmt.Println()
@@ -184,6 +195,113 @@ func AddVocabulary(vocab string, def string) (Error error) {
 		fmt.Println("Add vocabulary successfully!")
 	} else {
 		return errors.New("Invalid json format")
+	}
+	return nil
+}
+
+// Get vocabulary list
+func GetVocabularyList() (VocabularyList, error) {
+	var vocabulary_list VocabularyList
+	// Read schema and content
+	_, content, string_schema_content, string_content, err := ReadVocabularyList()
+	if err != nil {
+		return vocabulary_list, err
+	}
+	// validate json
+	result, err := json_validator.Validate(string_schema_content, string_content)
+	if result {
+		err = json.Unmarshal(content, &vocabulary_list)
+		if err != nil {
+			return vocabulary_list, err
+		}
+		// Sort
+		sort.Sort(vocabulary_list)
+		return vocabulary_list, nil
+	} else {
+		return vocabulary_list, errors.New("Invalid json format")
+	}
+}
+
+// Delete vocabulary from the vocabulary list
+func DeleteVocabulary(vocab string) (bool, error) {
+	var delete_result bool = false
+	fmt.Println("Start deleting vocabulary...")
+	// Read schema and content
+	_, content, string_schema_content, string_content, err := ReadVocabularyList()
+	if err != nil {
+		return delete_result, err
+	}
+	// validate json
+	result, err := json_validator.Validate(string_schema_content, string_content)
+	fmt.Println("Finish validating json")
+	if result {
+		var vocabulary_list VocabularyList
+		err = json.Unmarshal(content, &vocabulary_list)
+		if err != nil {
+			return delete_result, err
+		}
+		// Delete vocabulary
+		for i, v := range vocabulary_list.Data {
+			if v.Word == vocab {
+				vocabulary_list.Data = append(vocabulary_list.Data[:i], vocabulary_list.Data[i+1:]...)
+				delete_result = true
+				break
+			}
+		}
+		// turn it to bytes and store it in file
+		bytes, err := json.MarshalIndent(vocabulary_list, "", "  ")
+		if err != nil {
+			return delete_result, err
+		}
+		err = os.WriteFile(config.Settings.VocabListPath, bytes, 0666)
+		if err != nil {
+			return delete_result, err
+		}
+		fmt.Println("Add vocabulary successfully!")
+	} else {
+		return delete_result, errors.New("Invalid json format")
+	}
+	return delete_result, nil
+}
+
+// Vocabulary management
+func VocabularyManagement() (Error error) {
+	// Initialize vocabulary list
+	vocabulary_list, err := GetVocabularyList()
+	if err != nil {
+		fmt.Printf("\033[31mError: %s\033[0m", err)
+		return err
+	}
+	for vocab := range vocabulary_list.Data {
+		fmt.Printf("Word: %s", vocabulary_list.Data[vocab].Word)
+		fmt.Println()
+		fmt.Printf("Definition: %s", vocabulary_list.Data[vocab].Definition)
+		fmt.Println()
+		fmt.Println()
+	}
+	var delete_vocab bool = true
+	for delete_vocab {
+		delete_vocab = confirmation_interface.ConfirmationInterface("Do you want to delete a vocabulary?", false)
+		if delete_vocab {
+			var vocab_deleted bool
+			var input string
+			fmt.Println("Type the word of the vocabulary to delete:")
+			fmt.Scan(&input)
+			vocab_deleted, err = DeleteVocabulary(input)
+			if err != nil {
+				fmt.Printf("\033[31mError: %s\033[0m", err)
+				fmt.Println()
+				return err
+			}
+			if vocab_deleted {
+				fmt.Printf("\033[32mVocabulary %s has been deleted successfully!\033[0m", vocabulary_list.Data[0].Word)
+				fmt.Println()
+			} else {
+				fmt.Println("\033[31mError: Vocabulary not found!\033[0m")
+			}
+		} else {
+			fmt.Println("No vocabulary to delete.")
+		}
 	}
 	return nil
 }

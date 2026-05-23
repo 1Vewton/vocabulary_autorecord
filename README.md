@@ -38,6 +38,11 @@ Change the configuration of this tool.
 ```
 Add single vocabulary to the vocab list (vocabulary: VOCABULARY, definition: DEFINITION).
 
+```
+./autorecord.exe vocabularyManager
+```
+Manage the vocabulary list. Currently this can only delete vocabulary from the list. 
+
 ## Other Information
 
 To get the sheet name in the Excel file, run (Ctrl + Shift + Enter) the following command in one block of your excel file: 
