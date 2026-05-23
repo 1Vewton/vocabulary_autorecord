@@ -70,10 +70,17 @@ Here are some basic parameters for this method:
 The followings are the formulas. $p(L_{t})$ means the possibility of acquiring the knowledge on the $t^{th}$ practice. 
 
 We will first predict the possibility of user answering correct in the t-th practice: 
+
 $$p(\text{correct})={p(L_t) \cdot (1-p(S)) + (1-p(L_t)) \cdot p(G)}$$
+
 If the user answers correctly: 
+
 $$p(L_t | \text{correct})={p(L_t) \cdot (1-p(S)) \over p(\text{correct})}$$
+
 If the user answer incorrectly: 
+
 $$p(L_t | \text{incorrect})={p(L_t) \cdot p(S) \over 1-p(\text{correct})}$$
+
 Than we will get $p(L_{t+1})$: 
+
 $$p(L_{t+1})=p(L_t|\text{answer})+(1-p(L_t|\text{answer})) \cdot p(T)$$
