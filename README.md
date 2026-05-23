@@ -49,3 +49,31 @@ To get the sheet name in the Excel file, run (Ctrl + Shift + Enter) the followin
 ```
 =MID(CELL("filename",A1),FIND("]",CELL("filename",A1))+1,255)
 ```
+
+# Theories
+
+This program is based on the following theories:
+
+## BKT
+
+This program utilizes BKT (Bayesian Knowledge Tracing) to assess whether the student memorizes the vocabularies. BKT assumes that the state of acquiring of knowledge is binary. It will get a possibility between 0.0 and 1.0 of whether the student acquired this knowledge. The closer the possibility is to 1.0, the higher the possibility of acquiring this knowledge. 
+
+Here are some basic parameters for this method: 
+
+| Parameter Name | Meaning                                                                                                                                                                                                                                                                                          |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| $p(L_0)$       | The possibility of student acquired this knowledge before studying.                                                                                                                                                                                                                              |
+| $p(T)$         | The possibility of not acquiring this knowledge after certain exercise                                                                                                                                                                                                                           |
+| $p(G)$         | The possibility of not acquiring this knowledge but gues it right. (In this program's case, the user might guess the meaning of the vocabulary right through inferring the meaning from the similarity of this word to another word or just believes that the definition in the mind is correct) |
+| $p(S)$         | The possibility of already acquired the knowledge but get the wrong answer (In this program's case, the user might temporarily cannot remember the meaning of this word).                                                                                                                        |
+
+The followings are the formulas. $p(L_{t})$ means the possibility of acquiring the knowledge on the $t^{th}$ practice. 
+
+We will first predict the possibility of user answering correct in the t-th practice: 
+$$p(\text{correct})={p(L_t) \cdot (1-p(S)) + (1-p(L_t)) \cdot p(G)}$$
+If the user answers correctly: 
+$$p(L_t | \text{correct})={p(L_t) \cdot (1-p(S)) \over p(\text{correct})}$$
+If the user answer incorrectly: 
+$$p(L_t | \text{incorrect})={p(L_t) \cdot p(S) \over 1-p(\text{correct})}$$
+Than we will get $p(L_{t+1})$: 
+$$p(L_{t+1})=p(L_t|\text{answer})+(1-p(L_t|\text{answer})) \cdot p(T)$$

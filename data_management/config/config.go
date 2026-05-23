@@ -37,7 +37,7 @@ func GetpL0() float64 {
 
 // Initialize settings
 func InitializeSettings() {
-	Settings.pL0 = env_reader.GetEnvFloat64("PL0", 0.000001)
+	Settings.pL0 = env_reader.GetEnvFloat64("PL0", 0.1)
 	Settings.pT = env_reader.GetEnvFloat64("PT", 0.3)
 	Settings.pG = env_reader.GetEnvFloat64("PG", 0.2)
 	Settings.pS = env_reader.GetEnvFloat64("PS", 0.05)

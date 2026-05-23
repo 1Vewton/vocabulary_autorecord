@@ -305,3 +305,20 @@ func VocabularyManagement() (Error error) {
 	}
 	return nil
 }
+
+func SaveVocabularyList(updated_vocabulary_list VocabularyList) error {
+	vocabulary_list := updated_vocabulary_list
+	// Update time
+	vocabulary_list.LastUpdateTime = int(time.Now().Unix())
+	// turn it to bytes and store it in file
+	bytes, err := json.MarshalIndent(vocabulary_list, "", "  ")
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(config.Settings.VocabListPath, bytes, 0666)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Vocabulary saving successfully!")
+	return nil
+}
