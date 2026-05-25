@@ -43,6 +43,11 @@ Add single vocabulary to the vocab list (vocabulary: VOCABULARY, definition: DEF
 ```
 Manage the vocabulary list. Currently this can only delete vocabulary from the list. 
 
+```
+./autorecord.exe normalExercise
+```
+Start an exercise about vocabulary in normal mode. (Think about the definition of a vocabulary)
+
 ## Other Information
 
 To get the sheet name in the Excel file, run (Ctrl + Shift + Enter) the following command in one block of your excel file: 

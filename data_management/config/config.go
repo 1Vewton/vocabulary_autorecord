@@ -35,12 +35,27 @@ func GetpL0() float64 {
 	return Settings.pL0
 }
 
+// get pS
+func GetpS() float64 {
+	return Settings.pS
+}
+
+// get pS
+func GetpG() float64 {
+	return Settings.pG
+}
+
+// get pT
+func GetpT() float64 {
+	return Settings.pT
+}
+
 // Initialize settings
 func InitializeSettings() {
-	Settings.pL0 = env_reader.GetEnvFloat64("PL0", 0.1)
-	Settings.pT = env_reader.GetEnvFloat64("PT", 0.3)
-	Settings.pG = env_reader.GetEnvFloat64("PG", 0.2)
-	Settings.pS = env_reader.GetEnvFloat64("PS", 0.05)
+	Settings.pL0 = env_reader.GetEnvFloat64("PL0", 0.5)
+	Settings.pT = env_reader.GetEnvFloat64("PT", 0.14)
+	Settings.pG = env_reader.GetEnvFloat64("PG", 0.14)
+	Settings.pS = env_reader.GetEnvFloat64("PS", 0.09)
 	Settings.BaiscConfigPath = env_reader.GetEnvString("BASIC_CONFIG_PATH", "configuration.json")
 	Settings.VocabListPath = env_reader.GetEnvString("VOCAB_LIST_PATH", "vocab_list.json")
 	Settings.VocabFieldNane = env_reader.GetEnvString("VOCAB_FIELD_NAME", "vocabulary")
