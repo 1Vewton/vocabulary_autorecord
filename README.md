@@ -71,6 +71,7 @@ Here are some basic parameters for this method, you can change the certain value
 | $p(T)$         | The possibility of not acquiring this knowledge after certain exercise                                                                                                                                                                                                                           | `PT`                 |
 | $p(G)$         | The possibility of not acquiring this knowledge but gues it right. (In this program's case, the user might guess the meaning of the vocabulary right through inferring the meaning from the similarity of this word to another word or just believes that the definition in the mind is correct) | `PG`                 |
 | $p(S)$         | The possibility of already acquired the knowledge but get the wrong answer (In this program's case, the user might temporarily cannot remember the meaning of this word).                                                                                                                        | `PS`                 |
+
 The default value for these parameters are based on reaserch by *Yi et al.*[^1] based on ASSISTments Platform. 
 
 The followings are the formulas. $p(L_{t})$ means the possibility of acquiring the knowledge on the $t^{th}$ practice. 
