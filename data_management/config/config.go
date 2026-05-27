@@ -16,10 +16,11 @@ type env_config struct {
 	VocabFieldNane      string
 	DefinitionFieldNane string
 	// BKT related
-	pL0 float64
-	pT  float64
-	pG  float64
-	pS  float64
+	pL0    float64
+	pT     float64
+	pG     float64
+	pS     float64
+	lambda float64
 }
 
 var Settings env_config
@@ -50,6 +51,11 @@ func GetpT() float64 {
 	return Settings.pT
 }
 
+// get lambda
+func GetLambda() float64 {
+	return Settings.lambda
+}
+
 // Initialize settings
 func InitializeSettings() {
 	Settings.pL0 = env_reader.GetEnvFloat64("PL0", 0.5)
@@ -62,4 +68,5 @@ func InitializeSettings() {
 	Settings.DefinitionFieldNane = env_reader.GetEnvString("DEFINITION_FIELD_NAME", "definition")
 	Settings.ConfigSchemaPath = env_reader.GetEnvString("CONFIG_SCHEMA_PATH", "config_schema.json")
 	Settings.VocabSchemaPath = env_reader.GetEnvString("VOCAB_SCHEMA_PATH", "vocab_schema.json")
+	Settings.lambda = env_reader.GetEnvFloat64("LAMBDA", 0.09902)
 }

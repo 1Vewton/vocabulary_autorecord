@@ -11,6 +11,7 @@ import (
 	"github.com/1Vewton/vocabulary_autorecord/data_management/config"
 	"github.com/1Vewton/vocabulary_autorecord/utils/confirmation_interface"
 	"github.com/1Vewton/vocabulary_autorecord/utils/json_validator"
+	"github.com/1Vewton/vocabulary_autorecord/utils/maths"
 )
 
 // Vocabulary struct
@@ -216,6 +217,15 @@ func GetVocabularyList() (VocabularyList, error) {
 		}
 		// Sort
 		sort.Sort(vocabulary_list)
+		// Update the studied possibility of each vocabulary
+		fmt.Printf("current time: %d\n", int(time.Now().Unix()))
+		days := maths.GetDays(vocabulary_list.LastUpdateTime, int(time.Now().Unix()))
+		fmt.Printf("%f days since last update\n", days)
+		for i := 0; i < len(vocabulary_list.Data); i++ {
+			original_posibility := vocabulary_list.Data[i].StudiedPossibility
+			vocabulary_list.Data[i].StudiedPossibility = maths.PossibilityDecay(original_posibility, days)
+			fmt.Printf("%f -> %f\n", original_posibility, vocabulary_list.Data[i].StudiedPossibility)
+		}
 		return vocabulary_list, nil
 	} else {
 		return vocabulary_list, errors.New("Invalid json format")
