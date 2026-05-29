@@ -1,0 +1,45 @@
+package llm
+
+import (
+	"context"
+
+	"github.com/1Vewton/vocabulary_autorecord/data_management/basic_config"
+	"github.com/voocel/litellm"
+)
+
+// Request llm
+func Request(prompt string, response_chan chan string, err_chan chan error) {
+	response := ""
+	ctx := context.Background()
+	// Create client
+	client, err := litellm.NewWithProvider(
+		basic_config.BasicConfig.LLMProvider,
+		litellm.ProviderConfig{
+			APIKey:  basic_config.BasicConfig.LLMApiKey,
+			BaseURL: basic_config.BasicConfig.LLMBaseURL,
+		},
+	)
+	if err != nil {
+		response_chan <- response
+		err_chan <- err
+		return
+	}
+	// Start requesting
+	resp, err := client.Chat(
+		ctx,
+		&litellm.Request{
+			Model: basic_config.BasicConfig.LLMModelName,
+			Messages: []litellm.Message{
+				litellm.UserMessage(prompt),
+			},
+		},
+	)
+	response = resp.Content
+	if err != nil {
+		response_chan <- response
+		err_chan <- err
+		return
+	}
+	response_chan <- response
+	err_chan <- nil
+}
