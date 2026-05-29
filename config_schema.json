@@ -3,7 +3,10 @@
   "type": "object",
   "properties": {
     "VocabFieldName": { "type": "string"},
-    "DefinitionFieldName": { "type": "string"}
+    "DefinitionFieldName": { "type": "string"},
+    "LLMProvider": { "type": "string"},
+    "LLMModelName": { "type": "string"},
+    "LLMBaseURL": { "type": "string"}
   },
   "required": ["VocabFieldName", "DefinitionFieldName"]
 }
