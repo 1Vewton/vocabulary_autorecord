@@ -20,7 +20,6 @@ func Request(prompt string, response_chan chan string, err_chan chan error) {
 		},
 	)
 	if err != nil {
-		response_chan <- response
 		err_chan <- err
 		return
 	}
@@ -34,12 +33,10 @@ func Request(prompt string, response_chan chan string, err_chan chan error) {
 			},
 		},
 	)
-	response = resp.Content
 	if err != nil {
-		response_chan <- response
 		err_chan <- err
 		return
 	}
+	response = resp.Content
 	response_chan <- response
-	err_chan <- nil
 }
