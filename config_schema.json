@@ -6,7 +6,15 @@
     "DefinitionFieldName": { "type": "string"},
     "LLMProvider": { "type": "string"},
     "LLMModelName": { "type": "string"},
-    "LLMBaseURL": { "type": "string"}
+    "LLMBaseURL": { "type": "string"},
+    "LLMApiKey": { "type": "string"}
   },
-  "required": ["VocabFieldName", "DefinitionFieldName"]
+  "required": [
+    "VocabFieldName", 
+    "DefinitionFieldName", 
+    "LLMProvider",
+    "LLMModelName",
+    "LLMBaseURL",
+    "LLMApiKey"
+  ]
 }
