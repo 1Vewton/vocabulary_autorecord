@@ -5,9 +5,9 @@ import (
 )
 
 type VocabularyCheckResult struct {
-	correct bool
-	notice  string
-	tips    string
+	Correct bool   `json:"correct"`
+	Notice  string `json:"notice"`
+	Tips    string `json:"tips"`
 }
 
 type VCRValidateResults struct {
@@ -31,10 +31,10 @@ func ConvertVocabularyCheckResult(resultResp string) VCRValidateResults {
 
 // is the result correct
 func (vc VocabularyCheckResult) GetIsCorrect() bool {
-	return vc.correct
+	return vc.Correct
 }
 
 // Get the notice
 func (vc VocabularyCheckResult) GetNotice() string {
-	return vc.notice
+	return vc.Notice
 }

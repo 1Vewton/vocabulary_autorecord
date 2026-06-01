@@ -2,6 +2,7 @@ package llm
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/1Vewton/vocabulary_autorecord/data_management/basic_config"
 	"github.com/voocel/litellm"
@@ -10,6 +11,7 @@ import (
 // Request llm
 func Request(prompt string, response_chan chan string, err_chan chan error) {
 	response := ""
+	fmt.Println("Start requesting...")
 	ctx := context.Background()
 	// Create client
 	client, err := litellm.NewWithProvider(

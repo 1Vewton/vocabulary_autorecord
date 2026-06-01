@@ -40,6 +40,7 @@ func ExecuteExercise(exercise_num int) error {
 			case response := <-resp:
 				process_result := result_data.ConvertVocabularyCheckResult(response)
 				if !process_result.Success {
+					fmt.Println(response)
 					return errors.New("Failed to process the respnse of the LLM")
 				}
 				is_correct := process_result.Data.GetIsCorrect()

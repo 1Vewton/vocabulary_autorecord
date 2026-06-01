@@ -31,7 +31,7 @@ Read the vocabulary from the Excel file and save it to the memory.
 ```
 ./autorecord.exe configSetting
 ```
-Change the configuration of this tool.
+Change the configuration of this tool.(Include settings for the llm)
 
 ```
 ./autorecord.exe addSingleVocabulary -v VOCABULARY -d DEFINITION
@@ -47,6 +47,11 @@ Manage the vocabulary list. Currently this can only delete vocabulary from the l
 ./autorecord.exe normalExercise
 ```
 Start an exercise about vocabulary in normal mode. (Think about the definition of a vocabulary)
+
+```
+./autorecord.exe llmExercise
+```
+Start an exercise about vocabulary in llm mode. (Type the definition of vocabulary and the llm will check the correctness of the definition)
 
 ## Other Information
 

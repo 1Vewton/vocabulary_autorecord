@@ -3,6 +3,7 @@ package root
 import (
 	"github.com/1Vewton/vocabulary_autorecord/commands/add_vocabulary"
 	"github.com/1Vewton/vocabulary_autorecord/commands/config_setting"
+	"github.com/1Vewton/vocabulary_autorecord/commands/llm_exercise"
 	"github.com/1Vewton/vocabulary_autorecord/commands/normal_exercise"
 	"github.com/1Vewton/vocabulary_autorecord/commands/read_file"
 	"github.com/1Vewton/vocabulary_autorecord/commands/vocabulary_manager"
@@ -23,6 +24,7 @@ func Execute() error {
 	rootCommand.AddCommand(config_setting.ConfigSettingCmd)
 	rootCommand.AddCommand(normal_exercise.NormalExerciseCMD)
 	rootCommand.AddCommand(vocabulary_manager.VocabularyManagerCMD)
+	rootCommand.AddCommand(llm_exercise.LlmExerciseCMD)
 	err := rootCommand.Execute()
 	return err
 }
