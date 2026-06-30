@@ -124,8 +124,6 @@ func AddVocabularies(vocab_list_from_file map[string]string) (Error error) {
 				new_vocab.Definition = def
 				new_vocab.StudiedPossibility = config.GetpL0()
 				vocabulary_list.Data = append(vocabulary_list.Data, new_vocab)
-				// Update last update time
-				vocabulary_list.LastUpdateTime = int(time.Now().Unix())
 			} else {
 				fmt.Println("\033[31mThis vocabulary already exists!\033[0m")
 				fmt.Println()
@@ -178,8 +176,6 @@ func AddVocabulary(vocab string, def string) (Error error) {
 			new_vocab.Definition = def
 			new_vocab.StudiedPossibility = config.GetpL0()
 			vocabulary_list.Data = append(vocabulary_list.Data, new_vocab)
-			// Update last update time
-			vocabulary_list.LastUpdateTime = int(time.Now().Unix())
 		} else {
 			fmt.Println("\033[31mThis vocabulary already exists!\033[0m")
 			fmt.Println()
